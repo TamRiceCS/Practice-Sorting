@@ -80,8 +80,78 @@ void insertion(vector<int> nums) {
     }
 }
 
-void merge(vector<int> nums) {
 
+/*
+    Merge Sort
+        Based on a partition split the array into halves until it can no longer be split
+        Sort each half
+        merge sorted halves
+*/
+
+
+vector<int> merge(vector<int>& leftSide, vector<int>& rightSide, vector<int>& nums) {
+    
+    // get where legt and right side of original is
+    int left = nums.size()/2;
+    int right = nums.size() - left;
+
+    // indexes to keep track of in each vector
+    int orig = 0;
+    int l = 0;
+    int r = 0;
+
+    // go through picking the lesser of evils
+    while(l < left && r < right) {
+        if(leftSide[l] < rightSide[r]) {
+            nums[orig] = leftSide[l];
+            l++;
+        }
+        else{
+            nums[orig] = rightSide[r];
+            r++;
+        }
+        orig++;
+    }
+
+    // in cases where there are leftovers
+    while(l < left) {
+        nums[orig] = leftSide[l];
+        l++;
+        orig++;
+    }
+    while(r < right) {
+        nums[orig] = rightSide[r];
+        r++;
+        orig++;
+    }
+
+    return nums;
+
+}
+
+void mergeSort(vector<int>& nums) {
+
+    if(nums.size() <= 1) {
+        return;
+    }
+
+    int mid = nums.size()/2; // find mid
+
+    // create our left and right vectors
+    vector<int> leftSide;
+    vector<int> rightSide;
+
+    for(int i = 0; i < mid; i++ ) {
+        leftSide.push_back(nums[i]);
+    }
+
+    for(int i = mid; i < nums.size(); i++) {
+        rightSide.push_back(nums[i]);
+    }
+
+    mergeSort(leftSide); // go down left side
+    mergeSort(rightSide); // go down right side
+    nums = merge(leftSide, rightSide, nums);
 }
 
 int main() {
@@ -102,4 +172,11 @@ int main() {
     selection(nums);
     bubble(nums);
     insertion(nums);
+
+    mergeSort(nums);
+    cout << "\nMerge sort (n log n): " << endl;
+
+    for(auto elem : nums) {
+        cout << elem << " ";
+    }
 }
