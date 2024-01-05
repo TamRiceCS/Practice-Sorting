@@ -154,6 +154,45 @@ void mergeSort(vector<int>& nums) {
     nums = merge(leftSide, rightSide, nums);
 }
 
+/*
+    QuickSort
+        pick pivot, usually last val
+        set temp vars of i(is -1) and j(is 0)
+            if j is more than or equal to pivot ++
+            else i++ and swap
+        swap val of i and j
+        split the array to elements all elems before i and all elements after i
+*/
+
+int partition(vector<int>& nums, int start, int end) {
+    int pivot = nums[end];
+    int  i = start - 1;
+
+    for(int j = start; j <= end -1; j++) {
+        if(nums[j] < pivot) {
+            i++;
+            swap(nums[j], nums[i]);
+        }
+    }
+    i++;
+    swap(nums[end], nums[i]);
+
+    return i;
+}
+
+void quickSort(vector<int>& nums, int start, int end) {
+
+    // can't divide further
+    if(end <= start) {
+        return;
+    }
+
+    int pivot = partition(nums, start, end);
+    quickSort(nums, start, pivot-1);
+    quickSort(nums, pivot+1, end);
+
+}
+
 int main() {
 
     cout << "Let's practice coding sorting algorithms..." << endl;
@@ -167,14 +206,20 @@ int main() {
         cout << elem << " ";
     }
 
-    nums = {10, 8 , 7, 6, 3, 4, 2, 1, 5, 9};
 
     selection(nums);
     bubble(nums);
     insertion(nums);
 
+    nums = {10, 8 , 7, 6, 3, 4, 2, 1, 5, 9};
     mergeSort(nums);
     cout << "\nMerge sort (n log n): " << endl;
+    for(auto elem : nums) {
+        cout << elem << " ";
+    }
+    nums = {10, 8 , 7, 6, 3, 4, 2, 1, 5, 9};
+    quickSort(nums, 0 , nums.size()-1);
+    cout << "\nQuick sort (n log n): " << endl;
 
     for(auto elem : nums) {
         cout << elem << " ";
